@@ -2,7 +2,7 @@
   font-size: 1.25rem;
 }
 
-.app-list-item button {
+.app-list-item-reactions button {
   width: 35px;
   height: 35px;
   margin: 3px;
@@ -10,7 +10,7 @@
   border: none;
   cursor: pointer;
 }
-.app-list-item button:focus {
+.app-list-item-reactions button:focus {
     box-shadow: none;
     outline: none;
 }
@@ -33,6 +33,8 @@
 }
 
 .app-list-item-label {
+  max-width: calc(728px - 117px - 35px);
+  overflow: hidden;
   display: block;
   line-height: 35px;
   cursor: pointer;
@@ -51,4 +53,20 @@
 
 .app-list-item.important .btn-star {
     color: #aeaeae;
+}
+
+.edit-form {
+  position: absolute;
+  width: calc(800px - 3*35px - 117px);
+  height: 55px;
+}
+
+.edit-form textarea {
+  width: 100%;
+  resize: none;
+  overflow-wrap: break-word;
+}
+
+.invisible {
+  display: none;
 }

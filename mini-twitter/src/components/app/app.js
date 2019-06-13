@@ -11,9 +11,12 @@ import './app.css';
 const App = () => {
 
     const data = [
+        3,
         {label: 'Going to learn React', important: false, id: 'sdfg'},
         {label: 'That is good', important: false, id: 'ghfj'},
-        {label: 'I need a break...', important: true, id: 'werw'}        
+        {label: 'I need a break...', important: true, id: 'werw'},
+        {},
+        []      
     ];
 
     return (
