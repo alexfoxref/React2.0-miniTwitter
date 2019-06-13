@@ -1,9 +1,10 @@
 import React from 'react';
 import PostListItem from '../post-list-item'
+import { ListGroup, ListGroupItem } from 'reactstrap';
 
 import './post-list.css';
 
-const PostList = ({posts}) => {
+const PostList = ({posts, onDelete}) => {
 
     const elements = posts
         // Фильтруем все элементы массива кроме объектов (пустые объекты тоже фильтруем)
@@ -13,22 +14,23 @@ const PostList = ({posts}) => {
         .map(item => {
             const {id} = item;
             return (
-                <li id={id} key={id} className="list-group-item">
+                <ListGroupItem id={id} key={id} className="list-group-item">
                     <PostListItem 
                         // es8
                         {...item}
                         // эквивалентно
                         // label={item.label} 
                         // important={item.important}
+                        onDelete={() => onDelete(id)}
                     />
-                </li>
+                </ListGroupItem>
             )
         });
 
     return (
-        <ul className="app-list list-group">
+        <ListGroup className="app-list">
             {elements}
-        </ul>
+        </ListGroup>
     )
 }
 

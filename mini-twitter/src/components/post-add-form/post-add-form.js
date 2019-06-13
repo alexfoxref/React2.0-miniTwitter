@@ -1,20 +1,34 @@
 import React from 'react';
 
-import './post-add-form.css';
+// import './post-add-form.css';
+import styled from 'styled-components';
+import { Button, Input } from 'reactstrap';
 
-const PostAddForm = () => {
+const Form = styled.form`
+    display: flex;
+    margin-top: 20px;
+    .new-post-label {
+        width: auto;
+        flex-grow: 1;
+        margin-right: 3px;
+    }
+`
+
+const PostAddForm = ({onAdd}) => {
     return (
-        <form className="bottom-panel d-flex">
-            <input
+        <Form>
+            <Input
                 type="text"
                 placeholder="О чем Вы думаете сейчас?"
-                className="form-control new-post-label"
+                className="new-post-label"
             />
-            <button
+            <Button
                 type="submit"
-                className="btn btn-outline-secondary">
-            Добавить</button>
-        </form>
+                outline 
+                color="secondary"
+                onClick={() => onAdd('Hello!')}>
+            Добавить</Button>
+        </Form>
     )
 }
 

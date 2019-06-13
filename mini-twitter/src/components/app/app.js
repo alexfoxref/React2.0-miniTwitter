@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {Component} from 'react';
+import idGenerator from 'react-id-generator';
 
 import AppHeader from '../app-header';
 import SearchPanel from '../search-panel';
@@ -6,30 +7,69 @@ import PostStatusFilter from '../post-status-filter';
 import PostList from '../post-list';
 import PostAddForm from '../post-add-form';
 
-import './app.css';
+// import './app.css';
+import styled from 'styled-components';
 
-const App = () => {
+const AppBlock = styled.div`
+    margin: 0 auto;
+    max-width: 800px;
+`;
+const SearchBlock = styled.div`
+    display: flex;
+    margin: 1rem 0;
+`
 
-    const data = [
-        3,
-        {label: 'Going to learn React', important: false, id: 'sdfg'},
-        {label: 'That is good', important: false, id: 'ghfj'},
-        {label: 'I need a break...', important: true, id: 'werw'},
-        {},
-        []      
-    ];
+export default class App extends Component {
+    state = {
+        data : [
+            3,
+            {label: 'Going to learn React', important: false, id: idGenerator()},
+            {label: 'That is good', important: false, id: idGenerator()},
+            {label: 'I need a break...', important: true, id: idGenerator()},
+            {},
+            []      
+        ]
+    }
 
-    return (
-        <div className="app">
-            <AppHeader/>
-            <div className="search-panel d-flex">
-                <SearchPanel/>
-                <PostStatusFilter/>
-            </div>
-            <PostList posts={data}/>
-            <PostAddForm/>
-        </div>
-    )
+    deleteItem = (id) => {
+        this.setState(({data}) => {
+            const index = data.findIndex(elem => elem.id === id),
+                newArr = [...data.slice(0, index), ...data.slice(index + 1)];
+
+            return {
+                data: newArr
+            }
+        })
+    }
+
+    addItem = (body) => {
+        const newItem = {
+            label: body,
+            important: false,
+            id: idGenerator()
+        }
+        this.setState(({data}) => {
+            const newArr = [...data, newItem];
+            return {
+                data: newArr
+            }
+        })
+    }
+
+    render() {
+        return (
+            <AppBlock>
+                <AppHeader/>
+                <SearchBlock>
+                    <SearchPanel/>
+                    <PostStatusFilter/>
+                </SearchBlock>
+                <PostList 
+                    posts={this.state.data}
+                    onDelete={this.deleteItem}/>
+                <PostAddForm
+                    onAdd={this.addItem}/>
+            </AppBlock>
+        )
+    } 
 }
-
-export default App;

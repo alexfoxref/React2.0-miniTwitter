@@ -1,6 +1,12 @@
 import React from 'react';
 
-import './post-date.css';
+// import './post-date.css';
+import styled from 'styled-components';
+
+const DatePost = styled.p`
+    font-size: .75rem;
+    font-style: italic;
+`;
 
 const PostDate = ({value}) => {
     const date = value,
@@ -11,9 +17,9 @@ const PostDate = ({value}) => {
     dateStr = `${insertZero(date.getDate())}/${insertZero(date.getMonth() + 1)}/${date.getFullYear()} ${date.getHours()}:${insertZero(date.getMinutes())}:${insertZero(date.getSeconds())}`;
 
     return (
-        <p className="post-date-text">
+        <DatePost>
             Запись добавлена: {dateStr}
-        </p>
+        </DatePost>
     )
 }
 
