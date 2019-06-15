@@ -1,6 +1,5 @@
 import React from 'react';
 
-// import './post-add-form.css';
 import styled from 'styled-components';
 import { Button, Input } from 'reactstrap';
 

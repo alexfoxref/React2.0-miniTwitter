@@ -1,6 +1,5 @@
 import React from 'react';
 
-// import './post-date.css';
 import styled from 'styled-components';
 
 const DatePost = styled.p`
