@@ -4,24 +4,21 @@ import { ListGroup, ListGroupItem } from 'reactstrap';
 
 import './post-list.css';
 
-const PostList = ({posts, onDelete}) => {
+const PostList = ({posts, onDelete, onChange}) => {
 
     const elements = posts
         // Фильтруем все элементы массива кроме объектов (пустые объекты тоже фильтруем)
         .filter(item => {
-            return (Object.prototype.toString.call(item) === '[object Object]' && Object.keys(item).length !== 0)
+            return (Object.prototype.toString.call(item) === '[object Object]' && item.label && item.label.trim() !== '')
         })
         .map(item => {
-            const {id} = item;
+            const {id, ...itemProps} = item;
             return (
-                <ListGroupItem id={id} key={id} className="list-group-item">
+                <ListGroupItem key={id} className="list-group-item">
                     <PostListItem 
-                        // es8
-                        {...item}
-                        // эквивалентно
-                        // label={item.label} 
-                        // important={item.important}
-                        onDelete={() => onDelete(id)}
+                        {...itemProps}
+                        onDel={() => onDelete(id)} 
+                        onPush={(text) => onChange(text, id)}
                     />
                 </ListGroupItem>
             )

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import PostDate from '../post-date';
+import PostEdit from '../post-edit';
 
 import './post-list-item.css';
 
@@ -8,70 +9,61 @@ export default class PostListItem extends Component {
 
     // Class Fields
     state = {
-        label: this.props.label,
         important: false,
         like: false,
-        editForm: true,
-        pushBtn: true,
+        invisible: true,
         time: new Date()
     }
 
     onImportant = () => {
-        this.setState(({important}) => ({
+        const {important} = this.state;
+        this.setState(() => ({
             important: !important
         }))
     }
 
     onLike = () => {
-        this.setState(({like}) => ({
+        const {like} = this.state;
+        this.setState(() => ({
             like: !like
         }))
     }
 
-    // Показываем форму при клике на кнопку редактирования
-    onEdit = () => {
-        this.setState(({editForm}) => ({
-            editForm: !editForm
-        }))
-    }
-
-    // Показываем кнопку добавить при редактировании поста 
-    // (нужно бы ограничение на заполнение строки, чтобы переносить слова)
-    onInput = () => {
-        const elem = document.getElementById(this.props.id),
-            textarea = elem.querySelector('textarea'),
-            {label} = this.state;
-
-        if (textarea.value !== '' && textarea.value !== label) {
-            this.setState(() => ({
-                pushBtn: false
-        }))
-        } else {
-            this.setState(() => ({
-                pushBtn: true
-            }))
-        }
-    }
-
-    // Изменяем пост при клике на кнопку добавить
-    onPush = () => {
-        const elem = document.getElementById(this.props.id),
-            textarea = elem.querySelector('textarea');
-
-        this.setState(({editForm, pushBtn}) => ({
-            label: textarea.value,
-            editForm: !editForm,
-            pushBtn: !pushBtn,
+    // Функция добавления редактированной записи
+    onPush = (text) => {
+        this.setState(() => ({
+            invisible: true,
             time: new Date()
+        }));
+        this.props.onPush(text);
+    }
+
+    // Функция открытия окна редактирования
+    onEdit = (event) => {
+        const {invisible} = this.state,
+            {label} = this.props;
+        this.setState(() => ({
+            invisible: !invisible
         }))
+        // Индекс кнопки
+        let ind;
+        const elems = document.querySelectorAll('.btn-pencil');
+        elems.forEach((item, index) => {
+            const incl = item.querySelectorAll('*');
+            incl.forEach(i => {
+                if (event.target === i || event.target === item) {
+                    ind = index
+                }
+            })
+        })
+        // Меняем надпись в окне редактирования на начальную
+        document.querySelectorAll('textarea')[ind].value = label;
     }
 
     render() {
-        const {onDelete} = this.props;
-        const {important, like, label, time, editForm, pushBtn} = this.state;
-        let classNames = 'app-list-item d-flex justify-content-between',
-            classEdit = 'edit-form',
-            classBtn = 'btn btn-outline-secondary';
+        const {onDel, label} = this.props;
+        const {invisible, important, like, time} = this.state;
+        let classNames = 'app-list-item d-flex justify-content-between';
 
         if (important) {
             classNames += ' important';
@@ -79,14 +71,6 @@ export default class PostListItem extends Component {
 
         if (like) {
             classNames += ' like';
-        }
-
-        if (editForm) {
-            classEdit += ' invisible';
-        }
-
-        if (pushBtn) {
-            classBtn += ' invisible';
         }
 
         return (
@@ -99,33 +83,13 @@ export default class PostListItem extends Component {
                     </span>
 
                     {/* Время добавления записи */}
-                    <PostDate value={time}/>
-
-                    {/* Кнопки редактирования записи */}
-                    <div className="edit-block">
-                        <button 
-                            type="button" 
-                            className="btn btn-outline-secondary"
-                            onClick={this.onEdit}>
-                                Редактировать
-                        </button>
-                        <button 
-                            type="button" 
-                            className={classBtn}
-                            onClick={this.onPush}>
-                                Добавить
-                        </button>
-                    </div>
+                    <PostDate time={time}/>
                 </div>
 
-                {/* Форма редактирования поста */}
-                <form className={classEdit}>
-                    <textarea
-                        defaultValue={label}
-                        className="form-control new-post-label"
-                        onInput={this.onInput}>
-                    </textarea>
-                </form>
+                <PostEdit
+                    invisible={invisible}
+                    addPost={(text) => this.onPush(text)}
+                    label={label}/>
 
                 <div className="app-list-item-reactions d-flex justify-content-center align-items-center">
                     <button
@@ -137,8 +101,15 @@ export default class PostListItem extends Component {
                     <button
                         type="button"
                         className="btn-trash btn-sm"
-                        onClick={onDelete}>
+                        onClick={onDel}>
                             <i className="fa fa-trash-o"></i>
+                    </button>
+                    {/* Кнопка редактирования */}
+                    <button
+                        type="button"
+                        className="btn-pencil btn-sm"
+                        onClick={this.onEdit}>
+                            <i className="fa fa-pencil-square-o"></i>
                     </button>
                     <i className="fa fa-heart"></i>
                 </div>

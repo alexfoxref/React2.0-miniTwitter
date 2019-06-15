@@ -8,8 +8,8 @@ const DatePost = styled.p`
     font-style: italic;
 `;
 
-const PostDate = ({value}) => {
-    const date = value,
+const PostDate = ({time}) => {
+    const date = time,
     insertZero = (num) => {
         if (`${num}`.length === 1) return `0${num}`
         else return num

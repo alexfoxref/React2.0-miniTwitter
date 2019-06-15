@@ -20,6 +20,9 @@
 .app-list-item .btn-trash {
     color: red;
 }
+.app-list-item .btn-pencil {
+    color: black;
+}
 .app-list-item .fa-heart {
     width: 35px;
     height: 35px;
@@ -53,20 +56,4 @@
 
 .app-list-item.important .btn-star {
     color: #aeaeae;
-}
-
-.edit-form {
-  position: absolute;
-  width: calc(800px - 3*35px - 117px);
-  height: 55px;
-}
-
-.edit-form textarea {
-  width: 100%;
-  resize: none;
-  overflow-wrap: break-word;
-}
-
-.invisible {
-  display: none;
 }

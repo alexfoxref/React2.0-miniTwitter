@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import idGenerator from 'react-id-generator';
+// import idGenerator from 'react-id-generator';
+import idGenerator from '../id-generator';
 
 import AppHeader from '../app-header';
 import SearchPanel from '../search-panel';
@@ -17,7 +18,7 @@ const AppBlock = styled.div`
 const SearchBlock = styled.div`
     display: flex;
     margin: 1rem 0;
-`
+`;
 
 export default class App extends Component {
     state = {
@@ -27,6 +28,8 @@ export default class App extends Component {
             {label: 'That is good', important: false, id: idGenerator()},
             {label: 'I need a break...', important: true, id: idGenerator()},
             {},
+            {id: idGenerator()},
+            {label: '  '},
             []      
         ]
     }
@@ -56,6 +59,22 @@ export default class App extends Component {
         })
     }
 
+    changeItem = (text, id) => {
+        this.setState(({data}) => {
+            const index = data.findIndex(elem => elem.id === id),
+                changedItem = {
+                    label: text,
+                    important: false,
+                    id
+                },
+                newArr = [...data.slice(0, index), changedItem, ...data.slice(index + 1)];
+
+            return {
+                data: newArr
+            }
+        });
+    }
+
     render() {
         return (
             <AppBlock>
@@ -66,7 +85,8 @@ export default class App extends Component {
                 </SearchBlock>
                 <PostList 
                     posts={this.state.data}
-                    onDelete={this.deleteItem}/>
+                    onDelete={this.deleteItem}
+                    onChange={this.changeItem}/>
                 <PostAddForm
                     onAdd={this.addItem}/>
             </AppBlock>
