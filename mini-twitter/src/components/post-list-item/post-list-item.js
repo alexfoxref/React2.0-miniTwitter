@@ -12,7 +12,7 @@ export default class PostListItem extends Component {
         important: false,
         like: false,
         invisible: true,
-        time: new Date()
+        time: new Date(),
     }
 
     onImportant = () => {
@@ -61,7 +61,7 @@ export default class PostListItem extends Component {
     }
 
     render() {
-        const {onDel, label} = this.props;
+        const {onMod, label} = this.props;
         const {invisible, important, like, time} = this.state;
         let classNames = 'app-list-item d-flex justify-content-between';
 
@@ -101,7 +101,7 @@ export default class PostListItem extends Component {
                     <button
                         type="button"
                         className="btn-trash btn-sm"
-                        onClick={onDel}>
+                        onClick={onMod}>
                             <i className="fa fa-trash-o"></i>
                     </button>
                     {/* Кнопка редактирования */}

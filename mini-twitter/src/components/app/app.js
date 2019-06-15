@@ -7,6 +7,7 @@ import SearchPanel from '../search-panel';
 import PostStatusFilter from '../post-status-filter';
 import PostList from '../post-list';
 import PostAddForm from '../post-add-form';
+import DelModal from '../modal/';
 
 // import './app.css';
 import styled from 'styled-components';
@@ -31,7 +32,9 @@ export default class App extends Component {
             {id: idGenerator()},
             {label: '  '},
             []      
-        ]
+        ],
+        modal: false,
+        targetId: ''
     }
 
     deleteItem = (id) => {
@@ -75,7 +78,17 @@ export default class App extends Component {
         });
     }
 
+    toggleModal = (id) => {
+        const {modal} = this.state;
+        this.setState(() => ({
+            modal: !modal,
+            targetId: id
+        }))
+    }
+
     render() {
+        const {modal, targetId} = this.state;
+
         return (
             <AppBlock>
                 <AppHeader/>
@@ -85,10 +98,15 @@ export default class App extends Component {
                 </SearchBlock>
                 <PostList 
                     posts={this.state.data}
-                    onDelete={this.deleteItem}
+                    onModal={this.toggleModal}
                     onChange={this.changeItem}/>
                 <PostAddForm
                     onAdd={this.addItem}/>
+                <DelModal
+                    modal={modal}
+                    toggle={this.toggleModal}
+                    onDel={() => this.deleteItem(targetId)}
+                    className=""/>
             </AppBlock>
         )
     } 
