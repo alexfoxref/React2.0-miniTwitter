@@ -36,7 +36,8 @@
 }
 
 .app-list-item-label {
-  max-width: calc(728px - 117px - 35px);
+  max-width: calc(800px - 2*35px - 3px - 117px - 70px);
+  overflow-wrap: break-word;
   overflow: hidden;
   display: block;
   line-height: 35px;

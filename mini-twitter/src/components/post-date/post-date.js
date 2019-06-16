@@ -5,9 +5,10 @@ import styled from 'styled-components';
 const DatePost = styled.p`
     font-size: .75rem;
     font-style: italic;
+    line-height: 35px;
 `;
 
-const PostDate = ({time}) => {
+const PostDate = ({time, timeText}) => { 
     const date = time,
     insertZero = (num) => {
         if (`${num}`.length === 1) return `0${num}`
@@ -17,7 +18,7 @@ const PostDate = ({time}) => {
 
     return (
         <DatePost>
-            Запись добавлена: {dateStr}
+            Запись {timeText}: {dateStr}
         </DatePost>
     )
 }

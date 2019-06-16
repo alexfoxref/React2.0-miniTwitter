@@ -24,16 +24,18 @@ export default class App extends Component {
     state = {
         data : [
             3,
-            {label: 'Going to learn React', important: false, id: idGenerator()},
-            {label: 'That is good', important: false, id: idGenerator()},
-            {label: 'I need a break...', important: true, id: idGenerator()},
+            {label: 'Going to learn React', important: false, like: false, id: idGenerator()},
+            {label: 'That is good', important: false, like: true, id: idGenerator()},
+            {label: 'I need a break...', important: true, like: false, id: idGenerator()},
             {},
             {id: idGenerator()},
             {label: '  '},
             []      
         ],
         modal: false,
-        targetId: ''
+        targetId: '',
+        term: '',
+        filter: 'all'
     }
 
     deleteItem = (id) => {
@@ -85,20 +87,80 @@ export default class App extends Component {
         }))
     }
 
+    onToggleParam = (param, id) => {
+        this.setState(({data}) => {
+            const newParam = {};
+            const index = data.findIndex(elem => elem.id === id);
+
+            const old = data[index];
+            newParam[param] = !old[param];
+            const newItem = {...old, ...newParam};
+
+            const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)];
+
+            return {
+                data: newArr
+            }
+        })    
+    }
+
+    searchPost = (items, term) => {
+        if (term.length === 0) {
+            return items
+        } else {
+            return items.filter(item => {
+                return item.label.indexOf(term) > -1
+            })
+        }
+    }
+
+    onUpdateSearch = (term) => {
+        this.setState({
+            term
+        })
+    }
+
+    filterPost = (items, filter) => {
+        if (filter === 'like') {
+            return items.filter(item => item.like)
+        } else {
+            return items
+        }
+    }
+
+    onFilterSelect = (filter) => {
+        this.setState({filter})
+    }
+
     render() {
-        const {modal, targetId} = this.state;
+        const {modal, targetId, data, term, filter} = this.state;
+        const newData = data
+            .filter(item => {
+                return (Object.prototype.toString.call(item) === '[object Object]' && item.label && item.label.trim() !== '')
+            });
+
+        const liked = data.filter(item => item.like).length;
+        const allPosts = newData.length;
+
+        const visiblePosts = this.filterPost(this.searchPost(newData, term), filter);
 
         return (
             <AppBlock>
-                <AppHeader/>
+                <AppHeader
+                    liked={liked}
+                    allPosts={allPosts}/>
                 <SearchBlock>
-                    <SearchPanel/>
-                    <PostStatusFilter/>
+                    <SearchPanel
+                        onUpdateSearch={this.onUpdateSearch}/>
+                    <PostStatusFilter
+                        filter={filter}
+                        onFilterSelect={this.onFilterSelect}/>
                 </SearchBlock>
                 <PostList 
-                    posts={this.state.data}
+                    posts={visiblePosts}
                     onModal={this.toggleModal}
-                    onChange={this.changeItem}/>
+                    onChange={this.changeItem}
+                    onToggleParam={this.onToggleParam}/>
                 <PostAddForm
                     onAdd={this.addItem}/>
                 <DelModal

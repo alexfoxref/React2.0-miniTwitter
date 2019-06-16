@@ -8,11 +8,10 @@ import './post-list-item.css';
 export default class PostListItem extends Component {
 
     // Class Fields
-    state = {
-        important: false,
-        like: false,
+    state = { 
         invisible: true,
         time: new Date(),
+        timeText: 'добавлена'
     }
 
     onImportant = () => {
@@ -33,7 +32,8 @@ export default class PostListItem extends Component {
     onPush = (text) => {
         this.setState(() => ({
             invisible: true,
-            time: new Date()
+            time: new Date(),
+            timeText: 'отредактирована'
         }));
         this.props.onPush(text);
     }
@@ -61,8 +61,8 @@ export default class PostListItem extends Component {
     }
 
     render() {
-        const {onMod, label} = this.props;
-        const {invisible, important, like, time} = this.state;
+        const {onMod, label, onToggleParam, important, like} = this.props;
+        const {invisible, time, timeText} = this.state;
         let classNames = 'app-list-item d-flex justify-content-between';
 
         if (important) {
@@ -78,12 +78,14 @@ export default class PostListItem extends Component {
                 <div className="app-list-item-note">
                     <span 
                         className="app-list-item-label" 
-                        onClick={this.onLike}>
+                        onClick={() => onToggleParam('like')}>
                             {label}
                     </span>
 
                     {/* Время добавления записи */}
-                    <PostDate time={time}/>
+                    <PostDate
+                        time={time}
+                        timeText={timeText}/>
                 </div>
 
                 <PostEdit
@@ -95,7 +97,7 @@ export default class PostListItem extends Component {
                     <button
                         type="button"
                         className="btn-star btn-sm"
-                        onClick={this.onImportant}>
+                        onClick={() => onToggleParam('important')}>
                             <i className="fa fa-star"></i>
                     </button>
                     <button

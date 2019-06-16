@@ -1,15 +1,29 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 import { Input } from 'reactstrap';
 
-const SearchPanel = () => {
-    return (
-        <Input
-            className="search-input"
-            type="text"
-            placeholder="Поик по записям"
-        />
-    )
-}
+export default class SearchPanel extends Component {
 
-export default SearchPanel;
+    state = {
+        term: ''
+    }
+
+    onUpdateSearch = (event) => {
+        const term = event.target.value;
+        this.setState({
+            term
+        });
+        this.props.onUpdateSearch(term)
+    }
+
+    render() {
+        return (
+            <Input
+                className="search-input"
+                type="text"
+                placeholder="Поик по записям"
+                onChange={this.onUpdateSearch}
+            />
+        )
+    }
+}
