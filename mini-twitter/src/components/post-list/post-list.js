@@ -5,7 +5,7 @@ import { ListGroup, ListGroupItem } from 'reactstrap';
 
 import './post-list.css';
 
-const PostList = ({posts, onModal, onChange, onToggleParam}) => {
+const PostList = ({posts, onToggleModal, onChange, onToggleParam}) => {
 
     const elements = posts
         // Фильтруем все элементы массива кроме объектов (пустые объекты тоже фильтруем)
@@ -18,8 +18,8 @@ const PostList = ({posts, onModal, onChange, onToggleParam}) => {
                 <ListGroupItem key={id} className="list-group-item">
                     <PostListItem 
                         {...itemProps}
-                        onMod={() => onModal(id)}
-                        onPush={(text) => onChange(text, id)}
+                        onToggleModal={() => onToggleModal(id)}
+                        onChange={(text) => onChange(text, id)}
                         onToggleParam={(param) => onToggleParam(param, id)}
                     />
                 </ListGroupItem>

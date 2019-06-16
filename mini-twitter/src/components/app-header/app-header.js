@@ -19,10 +19,21 @@ const Header = styled.div`
 `;
 
 const AppHeader = ({liked, allPosts}) => {
+    // Редактируем окончание слова
+    let end = '';
+
+    if (/1$/.test(allPosts)) {
+        end = 'ь'
+    } else if (/[2-4]$/.test(allPosts)) {
+        end = 'и'
+    } else {
+        end = 'ей'
+    }
+
     return (
         <Header>
             <h1>Alex Demidenko</h1>
-            <h2>{allPosts} записей, из них понравилось {liked}</h2>
+            <h2>{allPosts} запис{end}, из них понравилось {liked}</h2>
         </Header>
     )
 };

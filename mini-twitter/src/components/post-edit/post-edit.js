@@ -106,7 +106,7 @@ export default class PostEdit extends Component {
     }
 
     render() {
-        const {addPost, invisible} = this.props;
+        const {onChange, invisible} = this.props;
         const {grey, disabled, text} = this.state;
         let emptyClass = '',
             activeClass = 'btn-sm';
@@ -139,7 +139,7 @@ export default class PostEdit extends Component {
                         type="button"
                         className={activeClass}
                         disabled={disabled}
-                        onClick={() => addPost(text)}>
+                        onClick={() => onChange(text)}>
                             <i className="fa fa-check-circle"></i>
                     </button>
                     {/* Кнопка очистки поля редактирования записи */}

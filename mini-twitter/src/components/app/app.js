@@ -33,7 +33,7 @@ export default class App extends Component {
             []      
         ],
         modal: false,
-        targetId: '',
+        deleteId: '',
         term: '',
         filter: 'all'
     }
@@ -63,7 +63,7 @@ export default class App extends Component {
         })
     }
 
-    changeItem = (text, id) => {
+    onChange = (text, id) => {
         this.setState(({data}) => {
             const index = data.findIndex(elem => elem.id === id),
                 changedItem = {
@@ -79,11 +79,10 @@ export default class App extends Component {
         });
     }
 
-    toggleModal = (id) => {
-        const {modal} = this.state;
-        this.setState(() => ({
+    onToggleModal = (id) => {
+        this.setState(({modal}) => ({
             modal: !modal,
-            targetId: id
+            deleteId: id
         }))
     }
 
@@ -109,7 +108,9 @@ export default class App extends Component {
             return items
         } else {
             return items.filter(item => {
-                return item.label.indexOf(term) > -1
+                // Поиск не зависит от регистра и позиции
+                const regTerm = new RegExp(term, 'ig');
+                return regTerm.test(item.label)
             })
         }
     }
@@ -133,7 +134,7 @@ export default class App extends Component {
     }
 
     render() {
-        const {modal, targetId, data, term, filter} = this.state;
+        const {modal, deleteId, data, term, filter} = this.state;
         const newData = data
             .filter(item => {
                 return (Object.prototype.toString.call(item) === '[object Object]' && item.label && item.label.trim() !== '')
@@ -158,15 +159,15 @@ export default class App extends Component {
                 </SearchBlock>
                 <PostList 
                     posts={visiblePosts}
-                    onModal={this.toggleModal}
-                    onChange={this.changeItem}
+                    onToggleModal={this.onToggleModal}
+                    onChange={this.onChange}
                     onToggleParam={this.onToggleParam}/>
                 <PostAddForm
                     onAdd={this.addItem}/>
                 <DelModal
                     modal={modal}
-                    toggle={this.toggleModal}
-                    onDel={() => this.deleteItem(targetId)}
+                    toggle={this.onToggleModal}
+                    onDelete={() => this.deleteItem(deleteId)}
                     className=""/>
             </AppBlock>
         )

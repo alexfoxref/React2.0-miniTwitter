@@ -14,35 +14,20 @@ export default class PostListItem extends Component {
         timeText: 'добавлена'
     }
 
-    onImportant = () => {
-        const {important} = this.state;
-        this.setState(() => ({
-            important: !important
-        }))
-    }
-
-    onLike = () => {
-        const {like} = this.state;
-        this.setState(() => ({
-            like: !like
-        }))
-    }
-
     // Функция добавления редактированной записи
-    onPush = (text) => {
+    onChange = (text) => {
         this.setState(() => ({
             invisible: true,
             time: new Date(),
             timeText: 'отредактирована'
         }));
-        this.props.onPush(text);
+        this.props.onChange(text);
     }
 
     // Функция открытия окна редактирования
     onEdit = (event) => {
-        const {invisible} = this.state,
-            {label} = this.props;
-        this.setState(() => ({
+        const {label} = this.props;
+        this.setState(({invisible}) => ({
             invisible: !invisible
         }))
         // Индекс кнопки
@@ -61,7 +46,7 @@ export default class PostListItem extends Component {
     }
 
     render() {
-        const {onMod, label, onToggleParam, important, like} = this.props;
+        const {onToggleModal, label, onToggleParam, important, like} = this.props;
         const {invisible, time, timeText} = this.state;
         let classNames = 'app-list-item d-flex justify-content-between';
 
@@ -90,7 +75,7 @@ export default class PostListItem extends Component {
 
                 <PostEdit
                     invisible={invisible}
-                    addPost={(text) => this.onPush(text)}
+                    onChange={(text) => this.onChange(text)}
                     label={label}/>
 
                 <div className="app-list-item-reactions d-flex justify-content-center align-items-center">
@@ -103,7 +88,7 @@ export default class PostListItem extends Component {
                     <button
                         type="button"
                         className="btn-trash btn-sm"
-                        onClick={onMod}>
+                        onClick={onToggleModal}>
                             <i className="fa fa-trash-o"></i>
                     </button>
                     {/* Кнопка редактирования */}
